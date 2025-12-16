@@ -4,7 +4,7 @@
 #define FVL_STRINGIFY(x) #x
 #define FVL_TOSTRING(x) FVL_STRINGIFY(x)
 
-#define FVL_TYPEDEF_LINE(line) typedef void Line##line;
+#define FVL_TYPEDEF_LINE(line) typedef void Line##line
 #define FVL_TYPEDEF FVL_TYPEDEF_LINE(__LINE__)
 
 #ifdef __linux__
