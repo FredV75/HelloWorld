@@ -3,9 +3,10 @@
 
 #define FVL_STRINGIFY(x) #x
 #define FVL_TOSTRING(x) FVL_STRINGIFY(x)
+#define FVL_CONCAT_IMPL(x, y) x##y
+#define FVL_CONCAT(x, y) FVL_CONCAT_IMPL(x, y)
 
-#define FVL_TYPEDEF_LINE(line) typedef void Line##line
-#define FVL_TYPEDEF FVL_TYPEDEF_LINE(__LINE__)
+#define FVL_TYPEDEF typedef void FVL_CONCAT(Line, __LINE__)
 
 #ifdef __linux__
 #define FVL_MSVC_PRAGMA_WARNING_PUSH FVL_TYPEDEF
