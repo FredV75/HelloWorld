@@ -2,7 +2,7 @@
 #pragma once
 
 #ifdef __linux__
-#define FVL_PRAGMA_WARNING
+#define FVL_PRAGMA_WARNING(x)
 #else
 #define FVL_PRAGMA_WARNING(x) __pragma(warning(x))
 #endif
