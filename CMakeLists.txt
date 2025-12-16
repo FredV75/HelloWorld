@@ -4,20 +4,16 @@ include(CMakePackageConfigHelpers)
 
 set(FVL_CMAKE_MODULES_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
-if(WIN32)
-    # Override these for Windows before including GNUInstallDirs
-    set(CMAKE_INSTALL_BINDIR "bin" CACHE PATH "User executables (bin)")
-    set(CMAKE_INSTALL_SBINDIR "bin" CACHE PATH "System admin executables (sbin)")
-    set(CMAKE_INSTALL_SYSCONFDIR "etc" CACHE PATH "Read-only single-machine data (etc)")
-    set(CMAKE_INSTALL_LIBDIR "${CMAKE_INSTALL_BINDIR}" CACHE PATH "Object code libraries (lib)")
-    set(CMAKE_INSTALL_LIBEXECDIR "${CMAKE_INSTALL_LIBDIR}" CACHE PATH "Program executables (libexec)")
-    set(CMAKE_INSTALL_ARCHIVEDIR "lib" CACHE PATH "Object code archives")
-    set(CMAKE_INSTALL_SOURCESDIR "sources" CACHE PATH "Sources archives")
-
-    # !!! Missing ???
-    set(CMAKE_INSTALL_EXPORTDIR "lib/cmake" CACHE PATH "CMake configurations l_dir")
-    set(CMAKE_INSTALL_INCLUDEDIR "include" CACHE PATH "CMake include l_dir")
-endif()
+########################################################################################################################
+set(CMAKE_INSTALL_BINDIR "bin" CACHE PATH "User executables (bin)")
+set(CMAKE_INSTALL_SBINDIR "bin" CACHE PATH "System admin executables (sbin)")
+set(CMAKE_INSTALL_SYSCONFDIR "etc" CACHE PATH "Read-only single-machine data (etc)")
+set(CMAKE_INSTALL_LIBDIR "${CMAKE_INSTALL_BINDIR}" CACHE PATH "Object code libraries (lib)")
+set(CMAKE_INSTALL_LIBEXECDIR "${CMAKE_INSTALL_LIBDIR}" CACHE PATH "Program executables (libexec)")
+set(CMAKE_INSTALL_ARCHIVEDIR "lib" CACHE PATH "Object code archives")
+set(CMAKE_INSTALL_SOURCESDIR "sources" CACHE PATH "Sources archives")
+set(CMAKE_INSTALL_EXPORTDIR "lib/cmake" CACHE PATH "CMake configurations l_dir")
+set(CMAKE_INSTALL_INCLUDEDIR "include" CACHE PATH "CMake include l_dir")
 
 ########################################################################################################################
 function(FvlPrintVariables)
