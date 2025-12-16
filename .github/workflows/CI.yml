@@ -1,0 +1,28 @@
+name: 'CI'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  my_cmake_job:
+    runs-on: ${{ matrix.os }}
+    name: Run cmake
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup cmake
+      uses: ./
+      id: setup
+      with:
+        cmake-version: 'latest'
+
+    - name: Run cmake --version
+      shell: bash
+      run: |
+        VERSION=`cmake --version`
+        echo $VERSION
