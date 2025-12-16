@@ -79,7 +79,7 @@ function(FvlSetCompilerOptions a_target)
         target_compile_options(${a_target} PRIVATE "/WX")
         target_compile_options(${a_target} PRIVATE "/GS")
         target_compile_options(${a_target} PRIVATE "/Zc:__cplusplus")
-        target_compile_options(${a_target} PRIVATE "/Qspectre")
+        # !!! target_compile_options(${a_target} PRIVATE "/Qspectre")
         target_compile_options(${a_target} PRIVATE "/bigobj")
 
         target_link_options(${a_target} PRIVATE "/DYNAMICBASE")
@@ -87,6 +87,7 @@ function(FvlSetCompilerOptions a_target)
 
         if(FVL_SET_COMPILER_OPTIONS_L_BUILD_TYPE_UPPER STREQUAL "DEBUG")
             target_link_options(${a_target} PRIVATE "/PROFILE")
+            target_link_options(${a_target} PRIVATE "/INCREMENTAL:NO")
         endif()
     endif()
 
@@ -546,6 +547,9 @@ macro(FvlAddLibrary)
                     target_compile_definitions(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} PRIVATE USE_LIB)
                 endif()
 
+                target_compile_definitions(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} PRIVATE "WINVER=0x0601")
+                target_compile_definitions(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} PRIVATE "_WIN32_WINNT=0x0601")
+
                 set(FVL_ADD_LIBRARY_L_ONCE ON)
 
                 unset(FVL_ADD_LIBRARY_L_TARGET_UPPER)
@@ -654,6 +658,9 @@ macro(FvlAddExecutable)
             if(${FVL_ADD_EXECUTABLE_L_TARGET_UPPER} STREQUAL "HYBRID")
                 target_compile_definitions(${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET} PRIVATE HYBRID)
             endif()
+
+            target_compile_definitions(${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET} PRIVATE "WINVER=0x0601")
+            target_compile_definitions(${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET} PRIVATE "_WIN32_WINNT=0x0601")
 
             set(FVL_ADD_EXECUTABLE_L_ONCE ON)
 
