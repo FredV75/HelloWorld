@@ -1,3 +1,4 @@
+on: workflow_dispatch
 jobs:
   my_cmake_job:
     runs-on: ${{ matrix.os }}
