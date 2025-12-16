@@ -3,6 +3,8 @@
 
 #ifndef __linux__
 #pragma warning(push, 1)
+#pragma warning(disable: 4668) // '' is not defined as a preprocessor macro, replacing with '0' for '#if/#elif'
+#pragma warning(disable: 4865) // the underlying type will change from 'int' to '__int64' when '/Zc:enumTypes' is specified
 #include <Windows.h>
 #include <crtdbg.h>
 #pragma warning(pop)
@@ -21,6 +23,7 @@ int main(int a_argc, char *a_argv[], char *a_envs[])
     (void)a_envs;
 
 #ifdef HYBRID
+#ifndef __linux__
     HMODULE hLib = ::LoadLibrary(LIBC_NAME);
     if (hLib)
     {
@@ -35,6 +38,7 @@ int main(int a_argc, char *a_argv[], char *a_envs[])
 
         ::FreeLibrary(hLib);
     }
+#endif
 #else
     ILibC *pC = ILibC::Create();
     ILibC::Delete(pC);
