@@ -2,14 +2,15 @@
 #pragma once
 
 #include "LibCApi.h"
+#include "Core/Macros.h"
 
 class LIBC_API ILibC
 {
 public:
-    virtual ~ILibC() {}
-
     static ILibC *Create();
     static void Delete(ILibC *a_pILibC);
+
+    FVL_VIRTUAL_DESTRUCTOR(ILibC);
 };
 
 #ifdef HYBRID

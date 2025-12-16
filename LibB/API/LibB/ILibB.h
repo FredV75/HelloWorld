@@ -2,6 +2,7 @@
 #pragma once
 
 #include "LibBApi.h"
+#include "Core/Macros.h"
 #include "LibA/ILibA.h"
 
 #pragma warning(push)
@@ -10,10 +11,10 @@
 class LIBB_API ILibB : public ILibA
 {
 public:
-    virtual ~ILibB() {}
-
     static ILibB *Create();
     static void Delete(ILibB *a_pILibB);
+
+    FVL_VIRTUAL_DESTRUCTOR(ILibB);
 };
 
 #pragma warning(pop)
