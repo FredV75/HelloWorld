@@ -10,7 +10,7 @@ public:
     static ILibC *Create();
     static void Delete(ILibC *a_pILibC);
 
-    FVL_VIRTUAL_DESTRUCTOR(ILibC);
+    FVL_VIRTUAL_DESTRUCTOR(ILibC)
 };
 
 #ifdef HYBRID

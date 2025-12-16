@@ -14,7 +14,7 @@ public:
     static ILibB *Create();
     static void Delete(ILibB *a_pILibB);
 
-    FVL_VIRTUAL_DESTRUCTOR(ILibB);
+    FVL_VIRTUAL_DESTRUCTOR(ILibB)
 };
 
 #pragma warning(pop)
