@@ -8,6 +8,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Build
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
 
@@ -16,7 +17,10 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Cache
-      run: cmake -S . -B DirTemp -DCMAKE_BUILD_TYPE=Debug
+      run: cmake -S . -B DirTemp -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=DirInstall
 
     - name: Build
       run: cmake --build DirTemp
+
+    - name: Install
+      run: cmake --build DirTemp --target install
