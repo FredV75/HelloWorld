@@ -11,16 +11,24 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
+        proc: [x86, x64]
+        type: [Debug, RelWithDebInfo]
+        coverage: [false]
+        include:
+          - os: ubuntu-latest
+            proc: x64
+            type: Debug
+            coverage: true
 
     steps:
     - name: Checkout
       uses: actions/checkout@v4
 
     - name: Cache
-      run: cmake -S . -B D64 -DCMAKE_BUILD_TYPE=D64 -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/I64
+      run: cmake -S . -B ${{ matrix.proc }}/${{ matrix.type }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/${{ matrix.proc }}/${{ matrix.type }}
 
     - name: Build
-      run: cmake --build D64
+      run: cmake --build ${{ matrix.proc }}/${{ matrix.type }}
 
     - name: Install
-      run: cmake --build D64 --target install
+      run: cmake --build ${{ matrix.proc }}/${{ matrix.type }} --target install
