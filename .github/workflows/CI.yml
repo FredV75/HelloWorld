@@ -4,21 +4,23 @@ on:
   workflow_dispatch:
 
 jobs:
-  my_cmake_job:
+  Build:
     runs-on: ${{ matrix.os }}
-    name: Build
+    name: Build ${{ matrix.show }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        proc: [x86, x64]
-        type: [Debug, RelWithDebInfo]
-        coverage: [false]
         include:
-          - os: ubuntu-latest
+          - show: 'Ubuntu x64 Debug'
+            os: ubuntu-latest
             proc: x64
             type: Debug
-            coverage: true
+            coverage: false
+          - show: 'Windows x64 Debug'
+            os: windows-latest
+            proc: x64
+            type: Debug
+            coverage: false
 
     steps:
     - name: Checkout
