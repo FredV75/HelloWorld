@@ -17,11 +17,23 @@ jobs:
             type: Debug
             preset: 'X64D'
             coverage: false
+          - show: 'Ubuntu x86 Debug'
+            os: ubuntu-latest
+            proc: x86
+            type: Debug
+            preset: 'X32D'
+            coverage: false
           - show: 'Windows x64 Debug'
             os: windows-latest
             proc: x64
             type: Debug
             preset: 'W64D'
+            coverage: false
+          - show: 'Windows x86 Debug'
+            os: windows-latest
+            proc: x86
+            type: Debug
+            preset: 'W32D'
             coverage: false
 
     steps:
