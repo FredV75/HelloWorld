@@ -648,7 +648,7 @@ macro(FvlAddExecutable)
 
                 if(WIN32)
                     get_target_property(FVL_ADD_EXECUTABLE_L_PDB ${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET} COMPILE_PDB_NAME)
-                    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${FVL_ADD_EXECUTABLE_L_PDB}.pdb" DESTINATION "${CMAKE_INSTALL_ARCHIVEDIR}" OPTIONAL)
+                    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${FVL_ADD_EXECUTABLE_L_PDB}.pdb" DESTINATION "${CMAKE_INSTALL_BINDIR}" OPTIONAL)
                     unset(FVL_ADD_EXECUTABLE_L_PDB)
                 endif()
 
