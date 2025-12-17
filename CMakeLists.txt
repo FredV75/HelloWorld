@@ -561,6 +561,14 @@ macro(FvlAddLibrary)
                 target_compile_definitions(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} PRIVATE "WINVER=0x0601")
                 target_compile_definitions(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} PRIVATE "_WIN32_WINNT=0x0601")
 
+                if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+                    message(STATUS "32-bit build detected")
+                    target_compile_definitions(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} PRIVATE "FVL_32B=1")
+                elseif (CMAKE_SIZEOF_VOID_P EQUAL 8)
+                    message(STATUS "64-bit build detected")
+                    target_compile_definitions(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} PRIVATE "FVL_64B=1")
+                endif()
+
                 unset(FVL_ADD_LIBRARY_L_TARGET_UPPER)
                 unset(FVL_ADD_LIBRARY_L_BUILD_TYPE_UPPER)
                 unset(FVL_ADD_LIBRARY_L_DEBUG_SUFFIX)
@@ -671,6 +679,14 @@ macro(FvlAddExecutable)
 
             target_compile_definitions(${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET} PRIVATE "WINVER=0x0601")
             target_compile_definitions(${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET} PRIVATE "_WIN32_WINNT=0x0601")
+
+            if(CMAKE_SIZEOF_VOID_P EQUAL 4)
+                message(STATUS "32-bit build detected")
+                target_compile_definitions(${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET} PRIVATE "FVL_32B=1")
+            elseif (CMAKE_SIZEOF_VOID_P EQUAL 8)
+                message(STATUS "64-bit build detected")
+                target_compile_definitions(${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET} PRIVATE "FVL_64B=1")
+            endif()
 
             set(FVL_ADD_EXECUTABLE_L_ONCE ON)
 

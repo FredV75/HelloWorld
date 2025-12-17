@@ -18,6 +18,18 @@ int main(int a_argc, char *a_argv[], char *a_envs[])
     ::SetConsoleOutputCP(65001);
 #endif
 
+#ifdef FVL_32B
+    static_assert(sizeof(void*) == 4, "mismatch");
+#else
+    static_assert(sizeof(void*) == 8, "mismatch");
+#endif
+
+#ifdef FVL_64B
+    static_assert(sizeof(void*) == 8, "mismatch");
+#else
+    static_assert(sizeof(void*) == 4, "mismatch");
+#endif
+
     (void)a_argc;
     (void)a_argv;
     (void)a_envs;
