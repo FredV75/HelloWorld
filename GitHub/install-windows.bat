@@ -1,0 +1,3 @@
+@echo off
+
+winget list

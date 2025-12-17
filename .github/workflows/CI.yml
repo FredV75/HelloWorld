@@ -15,11 +15,13 @@ jobs:
             os: ubuntu-latest
             proc: x64
             type: Debug
+            preset: 'X64D'
             coverage: false
           - show: 'Windows x64 Debug'
             os: windows-latest
             proc: x64
             type: Debug
+            preset: 'W64D'
             coverage: false
 
     steps:
@@ -27,7 +29,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Cache
-      run: cmake -S . -B ${{ matrix.proc }}/${{ matrix.type }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/${{ matrix.proc }}/${{ matrix.type }}
+      run: cmake -S . -B ${{ matrix.proc }}/${{ matrix.type }} --preset ${{ matrix.preset }}
 
     - name: Build
       run: cmake --build ${{ matrix.proc }}/${{ matrix.type }}
