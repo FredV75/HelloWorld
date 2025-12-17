@@ -44,6 +44,13 @@ jobs:
       with:
         arch: ${{ matrix.ilammy }}
 
+    - name: Linux install
+      if: ${{ matrix.linux }}
+      run: |
+        sudo dpkg --add-architecture i386
+        sudo apt update
+        sudo apt install -y g++-multilib gcc-multilib
+
     - name: Checkout
       uses: actions/checkout@v4
 
