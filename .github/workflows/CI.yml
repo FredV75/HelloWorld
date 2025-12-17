@@ -15,6 +15,7 @@ jobs:
             os: ubuntu-latest
             arch: x64
             type: Debug
+            linux: true
             preset: 'X64D'
             coverage: false
           - show: 'Windows x64 Debug'
@@ -51,7 +52,7 @@ jobs:
       run: cmake -S . -B Temp/${{ matrix.arch }}/${{ matrix.type }} -A ${{ matrix.cmakea }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}
 
     - name: Cache
-      if: ! ${{ matrix.msvc }}
+      if: ${{ matrix.linux }}
       run: cmake -S . -B Temp/${{ matrix.arch }}/${{ matrix.type }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}
 
     - name: Build
