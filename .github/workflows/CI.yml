@@ -45,10 +45,10 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Cache
-      run: cmake -S . -B ${{ matrix.arch }}/${{ matrix.type }} --preset ${{ matrix.preset }}
+      run: cmake -S . -B Temp/${{ matrix.arch }}/${{ matrix.type }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}
 
     - name: Build
-      run: cmake --build ${{ matrix.arch }}/${{ matrix.type }}
+      run: cmake --build Temp/${{ matrix.arch }}/${{ matrix.type }}
 
     - name: Install
-      run: cmake --build ${{ matrix.arch }}/${{ matrix.type }} --target install
+      run: cmake --build Temp/${{ matrix.arch }}/${{ matrix.type }} --target install
