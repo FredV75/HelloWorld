@@ -22,6 +22,7 @@ jobs:
             arch: x64
             type: Debug
             msvc: true
+            ilammy: x64
             preset: 'W64D'
             coverage: false
           - show: 'Windows x86 Debug'
@@ -29,6 +30,7 @@ jobs:
             arch: x86
             type: Debug
             msvc: true
+            ilammy: x86_amd64
             preset: 'W32D'
             coverage: false
 
@@ -37,7 +39,7 @@ jobs:
       uses: ilammy/msvc-dev-cmd@v1
       if: ${{ matrix.msvc }}
       with:
-        arch: ${{ matrix.arch }}
+        arch: ${{ matrix.ilammy }}
 
     - name: Checkout
       uses: actions/checkout@v4
