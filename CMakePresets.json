@@ -9,7 +9,6 @@
         {
             "name": "Debug64",
             "displayName": "Debug x64",
-            "generator": "Ninja",
             "binaryDir": "${sourceDir}/Temp/${presetName}",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
@@ -19,7 +18,6 @@
         {
             "name": "Release64",
             "displayName": "Release x64",
-            "generator": "Ninja",
             "binaryDir": "${sourceDir}/Temp/${presetName}",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "RelWithDebInfo",
@@ -29,7 +27,6 @@
         {
             "name": "Debug32",
             "displayName": "Debug x86",
-            "generator": "Ninja",
             "binaryDir": "${sourceDir}/Temp/${presetName}",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
@@ -43,7 +40,6 @@
         {
             "name": "Release32",
             "displayName": "Release x86",
-            "generator": "Ninja",
             "binaryDir": "${sourceDir}/Temp/${presetName}",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "RelWithDebInfo",
