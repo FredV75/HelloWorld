@@ -13,38 +13,40 @@ jobs:
         include:
           - show: 'Ubuntu x64 Debug'
             os: ubuntu-latest
-            proc: x64
+            arch: x64
             type: Debug
             preset: 'X64D'
             coverage: false
-          - show: 'Ubuntu x86 Debug'
-            os: ubuntu-latest
-            proc: x86
-            type: Debug
-            preset: 'X32D'
-            coverage: false
           - show: 'Windows x64 Debug'
             os: windows-latest
-            proc: x64
+            arch: x64
             type: Debug
+            msvc: true
             preset: 'W64D'
             coverage: false
           - show: 'Windows x86 Debug'
             os: windows-latest
-            proc: x86
+            arch: x86
             type: Debug
+            msvc: true
             preset: 'W32D'
             coverage: false
 
     steps:
+    - name: MSVC variables
+      uses: ilammy/msvc-dev-cmd@v1
+      if: ${{ matrix.msvc }}
+      with:
+        arch: ${{ matrix.arch }}
+
     - name: Checkout
       uses: actions/checkout@v4
 
     - name: Cache
-      run: cmake -S . -B ${{ matrix.proc }}/${{ matrix.type }} --preset ${{ matrix.preset }}
+      run: cmake -S . -B ${{ matrix.arch }}/${{ matrix.type }} --preset ${{ matrix.preset }}
 
     - name: Build
-      run: cmake --build ${{ matrix.proc }}/${{ matrix.type }}
+      run: cmake --build ${{ matrix.arch }}/${{ matrix.type }}
 
     - name: Install
-      run: cmake --build ${{ matrix.proc }}/${{ matrix.type }} --target install
+      run: cmake --build ${{ matrix.arch }}/${{ matrix.type }} --target install
