@@ -22,7 +22,8 @@ jobs:
             arch: x64
             type: Debug
             msvc: true
-            ilammy: 'win64'
+            ilammy: 'Win64'
+            cmakea: 'x64'
             preset: 'W64D'
             coverage: false
           - show: 'Windows x86 Debug'
@@ -30,7 +31,8 @@ jobs:
             arch: x86
             type: Debug
             msvc: true
-            ilammy: 'win32'
+            ilammy: 'Win32'
+            cmakea: 'Win32'
             preset: 'W32D'
             coverage: false
 
@@ -45,6 +47,11 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Cache
+      if: ${{ matrix.msvc }} == true
+      run: cmake -S . -B Temp/${{ matrix.arch }}/${{ matrix.type }} -A ${{ matrix.cmakea }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}
+
+    - name: Cache
+      if: ${{ matrix.msvc }} != true
       run: cmake -S . -B Temp/${{ matrix.arch }}/${{ matrix.type }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}
 
     - name: Build
