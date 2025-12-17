@@ -155,7 +155,6 @@
             "displayName": "X (Linux) x86 Debug",
             "inherits": [
                 "Base",
-                "Msvc",
                 "Debug",
                 "Linux",
                 "Linux-x86"
@@ -166,7 +165,6 @@
             "displayName": "X (Linux) x86 Release",
             "inherits": [
                 "Base",
-                "Msvc",
                 "Release",
                 "Linux",
                 "Linux-x86"
@@ -177,7 +175,6 @@
             "displayName": "X (Linux) x64 Debug",
             "inherits": [
                 "Base",
-                "Msvc",
                 "Debug",
                 "Linux",
                 "Linux-x64"
@@ -188,7 +185,6 @@
             "displayName": "X (Linux) x64 Release",
             "inherits": [
                 "Base",
-                "Msvc",
                 "Release",
                 "Linux",
                 "Linux-x64"
