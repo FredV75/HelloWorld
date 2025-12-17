@@ -25,14 +25,11 @@
 #endif
 
 #define FVL_VIRTUAL_DESTRUCTOR(name)\
-    FVL_GCC_PRAGMA_WARNING_PUSH\
-    FVL_GCC_PRAGMA_WARNING(pedantic)\
-    FVL_MSVC_PRAGMA_WARNING_PUSH\
-    FVL_MSVC_PRAGMA_WARNING(4710)\
+    FVL_MSVC_PRAGMA_WARNING_PUSH;\
+    FVL_MSVC_PRAGMA_WARNING(4710);\
     name() = default;\
     virtual ~name() = default;\
     name(const name &) = default;\
     name &operator=(const name &) = default;\
-    FVL_MSVC_PRAGMA_WARNING_POP\
-    FVL_GCC_PRAGMA_WARNING_POP
+    FVL_MSVC_PRAGMA_WARNING_POP
 

@@ -17,7 +17,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Cache
-      run: cmake -S . -B DirTemp -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=DirInstall
+      run: cmake -S . -B DirTemp -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_INSTALL_PREFIX:PATH=DirInstall
 
     - name: Build
       run: cmake --build DirTemp
