@@ -30,7 +30,7 @@ jobs:
             arch: x86
             type: Debug
             msvc: true
-            ilammy: x86_amd64
+            ilammy: amd64_x86
             preset: 'W32D'
             coverage: false
 
