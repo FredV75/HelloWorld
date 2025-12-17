@@ -27,14 +27,16 @@ int main(int a_argc, char *a_argv[], char *a_envs[])
     HMODULE hLib = ::LoadLibrary(LIBC_NAME);
     if (hLib)
     {
-#pragma warning(push)
-#pragma warning(disable: 4191) // 'type cast': unsafe conversion
+        FVL_MSVC_PRAGMA_WARNING_PUSH;
+        FVL_MSVC_PRAGMA_WARNING(4191); // 'type cast': unsafe conversion
+
         FctCreate pFctCreate = (FctCreate)(::GetProcAddress(hLib, "ILibC_Create"));
         ILibC *pC = (*pFctCreate)();
 
         FctDelete pFctDelete = (FctDelete)(::GetProcAddress(hLib, "ILibC_Delete"));
         (*pFctDelete)(pC);
-#pragma warning(pop)
+
+        FVL_MSVC_PRAGMA_WARNING_POP;
 
         ::FreeLibrary(hLib);
     }

@@ -2,23 +2,52 @@
     "version": 9,
     "cmakeMinimumRequired": {
         "major": 3,
-        "minor": 23,
+        "minor": 20,
         "patch": 0
     },
     "configurePresets": [
         {
-            "name": "Windows64Debug",
-            "displayName": "Windows x64 Debug",
-            "generator": "Ninja",
+            "name": "Debug64",
+            "displayName": "Debug x64",
+            "binaryDir": "${sourceDir}/Temp/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/Install/${presetName}"
+            }
+        },
+        {
+            "name": "Release64",
+            "displayName": "Release x64",
+            "binaryDir": "${sourceDir}/Temp/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/Install/${presetName}"
+            }
+        },
+        {
+            "name": "Debug32",
+            "displayName": "Debug x86",
             "binaryDir": "${sourceDir}/Temp/${presetName}",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug",
                 "CMAKE_INSTALL_PREFIX": "${sourceDir}/Install/${presetName}"
             },
-            "vendor": {
-                "microsoft.com/VisualStudioSettings/CMake/1.0": {
-                    "hostOS": [ "Windows" ]
-                }
+            "architecture": {
+                "value": "x86",
+                "strategy": "external"
+            }
+        },
+        {
+            "name": "Release32",
+            "displayName": "Release x86",
+            "binaryDir": "${sourceDir}/Temp/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/Install/${presetName}"
+            },
+            "architecture": {
+                "value": "x86",
+                "strategy": "external"
             }
         }
     ]

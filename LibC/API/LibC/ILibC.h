@@ -2,23 +2,24 @@
 #pragma once
 
 #include "LibCApi.h"
+#include "Core/Macros.h"
 
 class LIBC_API ILibC
 {
 public:
-    virtual ~ILibC() {}
-
     static ILibC *Create();
     static void Delete(ILibC *a_pILibC);
+
+    FVL_VIRTUAL_DESTRUCTOR(ILibC);
 };
 
 #ifdef HYBRID
 extern "C"
 {
 #ifdef _DEBUG
-    #define LIBC_NAME "LibCHybridD.dll"
+#define LIBC_NAME "LibCHybridD.dll"
 #else
-    #define LIBC_NAME "LibCHybrid.dll"
+#define LIBC_NAME "LibCHybrid.dll"
 #endif
 
     typedef ILibC *(*FctCreate)();

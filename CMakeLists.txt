@@ -1,23 +1,19 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.20)
 
 include(CMakePackageConfigHelpers)
 
 set(FVL_CMAKE_MODULES_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
-if(WIN32)
-    # Override these for Windows before including GNUInstallDirs
-    set(CMAKE_INSTALL_BINDIR "bin" CACHE PATH "User executables (bin)")
-    set(CMAKE_INSTALL_SBINDIR "bin" CACHE PATH "System admin executables (sbin)")
-    set(CMAKE_INSTALL_SYSCONFDIR "etc" CACHE PATH "Read-only single-machine data (etc)")
-    set(CMAKE_INSTALL_LIBDIR "${CMAKE_INSTALL_BINDIR}" CACHE PATH "Object code libraries (lib)")
-    set(CMAKE_INSTALL_LIBEXECDIR "${CMAKE_INSTALL_LIBDIR}" CACHE PATH "Program executables (libexec)")
-    set(CMAKE_INSTALL_ARCHIVEDIR "lib" CACHE PATH "Object code archives")
-    set(CMAKE_INSTALL_SOURCESDIR "sources" CACHE PATH "Sources archives")
-
-    # !!! Missing ???
-    set(CMAKE_INSTALL_EXPORTDIR "lib/cmake" CACHE PATH "CMake configurations l_dir")
-    set(CMAKE_INSTALL_INCLUDEDIR "include" CACHE PATH "CMake include l_dir")
-endif()
+########################################################################################################################
+set(CMAKE_INSTALL_BINDIR "bin" CACHE PATH "User executables (bin)")
+set(CMAKE_INSTALL_SBINDIR "bin" CACHE PATH "System admin executables (sbin)")
+set(CMAKE_INSTALL_SYSCONFDIR "etc" CACHE PATH "Read-only single-machine data (etc)")
+set(CMAKE_INSTALL_LIBDIR "${CMAKE_INSTALL_BINDIR}" CACHE PATH "Object code libraries (lib)")
+set(CMAKE_INSTALL_LIBEXECDIR "${CMAKE_INSTALL_LIBDIR}" CACHE PATH "Program executables (libexec)")
+set(CMAKE_INSTALL_ARCHIVEDIR "lib" CACHE PATH "Object code archives")
+set(CMAKE_INSTALL_SOURCESDIR "sources" CACHE PATH "Sources archives")
+set(CMAKE_INSTALL_EXPORTDIR "lib/cmake" CACHE PATH "CMake configurations l_dir")
+set(CMAKE_INSTALL_INCLUDEDIR "include" CACHE PATH "CMake include l_dir")
 
 ########################################################################################################################
 function(FvlPrintVariables)
@@ -220,6 +216,8 @@ macro(FvlTargetLinkLibraries)
                                     FvlTargetLinkLibrariesDo(${FVL_TARGET_LINK_LIBRARIES_NAME}-${FVL_TARGET_LINK_LIBRARIES_L_TARGET} ${FVL_TARGET_LINK_LIBRARIES_L_SCOPE} ${FVL_TARGET_LINK_LIBRARIES_L_PROJECT}-Shared)
                                 elseif(TARGET ${FVL_TARGET_LINK_LIBRARIES_L_PROJECT}-Static)
                                     FvlTargetLinkLibrariesDo(${FVL_TARGET_LINK_LIBRARIES_NAME}-${FVL_TARGET_LINK_LIBRARIES_L_TARGET} ${FVL_TARGET_LINK_LIBRARIES_L_SCOPE} ${FVL_TARGET_LINK_LIBRARIES_L_PROJECT}-Static)
+                                elseif(TARGET ${FVL_TARGET_LINK_LIBRARIES_L_PROJECT}-Interface)
+                                    FvlTargetLinkLibrariesDo(${FVL_TARGET_LINK_LIBRARIES_NAME}-${FVL_TARGET_LINK_LIBRARIES_L_TARGET} ${FVL_TARGET_LINK_LIBRARIES_L_SCOPE} ${FVL_TARGET_LINK_LIBRARIES_L_PROJECT}-Interface)
                                 else()
                                     message(FATAL_ERROR "FUCK !!!")
                                 endif()
@@ -229,6 +227,8 @@ macro(FvlTargetLinkLibraries)
                                     FvlTargetLinkLibrariesDo(${FVL_TARGET_LINK_LIBRARIES_NAME}-${FVL_TARGET_LINK_LIBRARIES_L_TARGET} ${FVL_TARGET_LINK_LIBRARIES_L_SCOPE} ${FVL_TARGET_LINK_LIBRARIES_L_PROJECT}-Static)
                                 elseif(TARGET ${FVL_TARGET_LINK_LIBRARIES_L_PROJECT}-Shared)
                                     FvlTargetLinkLibrariesDo(${FVL_TARGET_LINK_LIBRARIES_NAME}-${FVL_TARGET_LINK_LIBRARIES_L_TARGET} ${FVL_TARGET_LINK_LIBRARIES_L_SCOPE} ${FVL_TARGET_LINK_LIBRARIES_L_PROJECT}-Shared)
+                                elseif(TARGET ${FVL_TARGET_LINK_LIBRARIES_L_PROJECT}-Interface)
+                                    FvlTargetLinkLibrariesDo(${FVL_TARGET_LINK_LIBRARIES_NAME}-${FVL_TARGET_LINK_LIBRARIES_L_TARGET} ${FVL_TARGET_LINK_LIBRARIES_L_SCOPE} ${FVL_TARGET_LINK_LIBRARIES_L_PROJECT}-Interface)
                                 else()
                                     message(FATAL_ERROR "FUCK !!!")
                                 endif()
@@ -248,6 +248,8 @@ macro(FvlTargetLinkLibraries)
                                         FvlTargetLinkLibrariesDo(${FVL_TARGET_LINK_LIBRARIES_NAME}-${FVL_TARGET_LINK_LIBRARIES_L_TARGET} ${FVL_TARGET_LINK_LIBRARIES_L_SCOPE} ${FVL_TARGET_LINK_LIBRARIES_L_PROJECT}-Shared)
                                     elseif(TARGET ${FVL_TARGET_LINK_LIBRARIES_L_PROJECT}-Hybrid)
                                         FvlTargetLinkLibrariesDo(${FVL_TARGET_LINK_LIBRARIES_NAME}-${FVL_TARGET_LINK_LIBRARIES_L_TARGET} ${FVL_TARGET_LINK_LIBRARIES_L_SCOPE} ${FVL_TARGET_LINK_LIBRARIES_L_PROJECT}-Hybrid)
+                                    elseif(TARGET ${FVL_TARGET_LINK_LIBRARIES_L_PROJECT}-Interface)
+                                        FvlTargetLinkLibrariesDo(${FVL_TARGET_LINK_LIBRARIES_NAME}-${FVL_TARGET_LINK_LIBRARIES_L_TARGET} ${FVL_TARGET_LINK_LIBRARIES_L_SCOPE} ${FVL_TARGET_LINK_LIBRARIES_L_PROJECT}-Interface)
                                     else()
                                         message(FATAL_ERROR "FUCK !!!")
                                     endif()
@@ -514,29 +516,29 @@ macro(FvlAddLibrary)
                 if(${FVL_TARGET_${FVL_ADD_LIBRARY_L_TARGET_UPPER}_TYPE} STREQUAL "SHARED")
 
                     set_target_properties(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} PROPERTIES OUTPUT_NAME "${FVL_ADD_LIBRARY_NAME}${FVL_TARGET_${FVL_ADD_LIBRARY_L_TARGET_UPPER}_SUFFIX}")
-                    if(WIN32)
-                        set_target_properties(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} PROPERTIES DEBUG_POSTFIX "D")
-                    endif()
+                    set_target_properties(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} PROPERTIES DEBUG_POSTFIX "D")
 
                     target_compile_definitions(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} PRIVATE "$<UPPER_CASE:${FVL_ADD_LIBRARY_NAME}>_EXPORTS")
                     target_compile_definitions(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} INTERFACE "$<UPPER_CASE:${FVL_ADD_LIBRARY_NAME}>_IMPORTS")
 
-                    install(FILES $<TARGET_PDB_FILE:${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET}> DESTINATION "${CMAKE_INSTALL_BINDIR}" OPTIONAL)
+                    if(WIN32)
+                        install(FILES $<TARGET_PDB_FILE:${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET}> DESTINATION "${CMAKE_INSTALL_BINDIR}" OPTIONAL)
+                    endif()
 
                 elseif(${FVL_TARGET_${FVL_ADD_LIBRARY_L_TARGET_UPPER}_TYPE} STREQUAL "STATIC")
 
                     set_target_properties(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} PROPERTIES OUTPUT_NAME "${FVL_ADD_LIBRARY_NAME}${FVL_TARGET_${FVL_ADD_LIBRARY_L_TARGET_UPPER}_SUFFIX}")
-                    if(WIN32)
-                        set_target_properties(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} PROPERTIES DEBUG_POSTFIX "D")
-                        set_target_properties(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} PROPERTIES COMPILE_PDB_NAME "${FVL_ADD_LIBRARY_NAME}${FVL_TARGET_${FVL_ADD_LIBRARY_L_TARGET_UPPER}_SUFFIX}${FVL_ADD_LIBRARY_L_DEBUG_SUFFIX}")
-                    endif()
-
+                    set_target_properties(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} PROPERTIES DEBUG_POSTFIX "D")
+                    set_target_properties(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} PROPERTIES COMPILE_PDB_NAME "${FVL_ADD_LIBRARY_NAME}${FVL_TARGET_${FVL_ADD_LIBRARY_L_TARGET_UPPER}_SUFFIX}${FVL_ADD_LIBRARY_L_DEBUG_SUFFIX}")
                     set_target_properties(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} PROPERTIES COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
-                    get_target_property(FVL_ADD_LIBRARY_L_PDB ${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} COMPILE_PDB_NAME)
 
                     target_compile_definitions(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} PRIVATE _LIB)
 
-                    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${FVL_ADD_LIBRARY_L_PDB}.pdb" DESTINATION "${CMAKE_INSTALL_ARCHIVEDIR}" OPTIONAL)
+                    if(WIN32)
+                        get_target_property(FVL_ADD_LIBRARY_L_PDB ${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} COMPILE_PDB_NAME)
+                        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${FVL_ADD_LIBRARY_L_PDB}.pdb" DESTINATION "${CMAKE_INSTALL_ARCHIVEDIR}" OPTIONAL)
+                        unset(FVL_ADD_LIBRARY_L_PDB)
+                    endif()
 
                 else()
                     message(FATAL_ERROR "FUCK !!!")
@@ -550,13 +552,12 @@ macro(FvlAddLibrary)
                 target_compile_definitions(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} PRIVATE "WINVER=0x0601")
                 target_compile_definitions(${FVL_ADD_LIBRARY_NAME}-${FVL_ADD_LIBRARY_L_TARGET} PRIVATE "_WIN32_WINNT=0x0601")
 
-                set(FVL_ADD_LIBRARY_L_ONCE ON)
-
                 unset(FVL_ADD_LIBRARY_L_TARGET_UPPER)
                 unset(FVL_ADD_LIBRARY_L_BUILD_TYPE_UPPER)
                 unset(FVL_ADD_LIBRARY_L_DEBUG_SUFFIX)
-                unset(FVL_ADD_LIBRARY_L_PDB)
             endif()
+
+            set(FVL_ADD_LIBRARY_L_ONCE ON)
 
         endforeach()
         unset(FVL_ADD_LIBRARY_L_TARGET)
@@ -630,26 +631,26 @@ macro(FvlAddExecutable)
             if(${FVL_TARGET_${FVL_ADD_EXECUTABLE_L_TARGET_UPPER}_TYPE} STREQUAL "SHARED")
 
                 set_target_properties(${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET} PROPERTIES OUTPUT_NAME "${FVL_ADD_EXECUTABLE_NAME}${FVL_TARGET_${FVL_ADD_EXECUTABLE_L_TARGET_UPPER}_SUFFIX}")
-                if(WIN32)
-                    set_target_properties(${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET} PROPERTIES DEBUG_POSTFIX "D")
-                endif()
+                set_target_properties(${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET} PROPERTIES DEBUG_POSTFIX "D")
 
-                install(FILES $<TARGET_PDB_FILE:${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET}> DESTINATION "${CMAKE_INSTALL_BINDIR}" OPTIONAL)
+                if(WIN32)
+                    install(FILES $<TARGET_PDB_FILE:${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET}> DESTINATION "${CMAKE_INSTALL_BINDIR}" OPTIONAL)
+                endif()
 
             elseif(${FVL_TARGET_${FVL_ADD_EXECUTABLE_L_TARGET_UPPER}_TYPE} STREQUAL "STATIC")
 
                 set_target_properties(${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET} PROPERTIES OUTPUT_NAME "${FVL_ADD_EXECUTABLE_NAME}${FVL_TARGET_${FVL_ADD_EXECUTABLE_L_TARGET_UPPER}_SUFFIX}")
-                if(WIN32)
-                    set_target_properties(${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET} PROPERTIES DEBUG_POSTFIX "D")
-                    set_target_properties(${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET} PROPERTIES COMPILE_PDB_NAME "${FVL_ADD_EXECUTABLE_NAME}${FVL_TARGET_${FVL_ADD_EXECUTABLE_L_TARGET_UPPER}_SUFFIX}${FVL_ADD_EXECUTABLE_L_DEBUG_SUFFIX}")
-                endif()
-
+                set_target_properties(${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET} PROPERTIES DEBUG_POSTFIX "D")
+                set_target_properties(${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET} PROPERTIES COMPILE_PDB_NAME "${FVL_ADD_EXECUTABLE_NAME}${FVL_TARGET_${FVL_ADD_EXECUTABLE_L_TARGET_UPPER}_SUFFIX}${FVL_ADD_EXECUTABLE_L_DEBUG_SUFFIX}")
                 set_target_properties(${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET} PROPERTIES COMPILE_PDB_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
-                get_target_property(FVL_ADD_EXECUTABLE_L_PDB ${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET} COMPILE_PDB_NAME)
 
                 target_compile_definitions(${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET} PRIVATE USE_LIB)
 
-                install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${FVL_ADD_EXECUTABLE_L_PDB}.pdb" DESTINATION "${CMAKE_INSTALL_ARCHIVEDIR}" OPTIONAL)
+                if(WIN32)
+                    get_target_property(FVL_ADD_EXECUTABLE_L_PDB ${FVL_ADD_EXECUTABLE_NAME}-${FVL_ADD_EXECUTABLE_L_TARGET} COMPILE_PDB_NAME)
+                    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/${FVL_ADD_EXECUTABLE_L_PDB}.pdb" DESTINATION "${CMAKE_INSTALL_BINDIR}" OPTIONAL)
+                    unset(FVL_ADD_EXECUTABLE_L_PDB)
+                endif()
 
             else()
                 message(FATAL_ERROR "FUCK !!!")
@@ -667,7 +668,6 @@ macro(FvlAddExecutable)
             unset(FVL_ADD_EXECUTABLE_L_TARGET_UPPER)
             unset(FVL_ADD_EXECUTABLE_L_BUILD_TYPE_UPPER)
             unset(FVL_ADD_EXECUTABLE_L_DEBUG_SUFFIX)
-            unset(FVL_ADD_EXECUTABLE_L_PDB)
 
         endforeach()
         unset(FVL_ADD_EXECUTABLE_L_TARGET)
@@ -737,6 +737,7 @@ FvlAddTarget(Hybrid TYPE Shared SUFFIX Hybrid)
 
 project(HelloWorld)
 
+add_subdirectory(Core)
 add_subdirectory(LibA)
 add_subdirectory(LibB)
 add_subdirectory(LibC)
