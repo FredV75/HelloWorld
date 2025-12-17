@@ -22,7 +22,7 @@ jobs:
             arch: x64
             type: Debug
             msvc: true
-            ilammy: x64
+            ilammy: 'win64'
             preset: 'W64D'
             coverage: false
           - show: 'Windows x86 Debug'
@@ -30,7 +30,7 @@ jobs:
             arch: x86
             type: Debug
             msvc: true
-            ilammy: amd64_x86
+            ilammy: 'win32'
             preset: 'W32D'
             coverage: false
 
