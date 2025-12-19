@@ -11,13 +11,11 @@ void IStatic::Delete(IStatic *a_pIStatic)
     delete a_pIStatic;
 }
 
-Static::Static() : m_pILibC(0)
+Static::Static()
 {
-    m_pILibC = ILibC::Create();
 }
 
 Static::~Static()
 {
-    ILibC::Delete(m_pILibC);
 }
 
