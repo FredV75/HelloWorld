@@ -4,23 +4,77 @@ on:
   workflow_dispatch:
 
 jobs:
-  my_cmake_job:
+  Build:
     runs-on: ${{ matrix.os }}
-    name: Build
+    name: Build ${{ matrix.show }}
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        include:
+          - show: 'Ubuntu x64 Debug'
+            os: ubuntu-latest
+            arch: x64
+            type: Debug
+            linux: true
+            preset: 'X64D'
+            coverage: false
+          - show: 'Ubuntu x86 Debug'
+            os: ubuntu-latest
+            arch: x86
+            type: Debug
+            linux: true
+            preset: 'X32D'
+            coverage: false
+          - show: 'Windows x64 Debug'
+            os: windows-latest
+            arch: x64
+            type: Debug
+            msvc: true
+            ilammy: 'Win64'
+            cmakea: 'x64'
+            preset: 'W64D'
+            coverage: false
+          - show: 'Windows x86 Debug'
+            os: windows-latest
+            arch: x86
+            type: Debug
+            msvc: true
+            ilammy: 'Win32'
+            cmakea: 'Win32'
+            preset: 'W32D'
+            coverage: false
 
     steps:
+    - name: MSVC variables
+      uses: ilammy/msvc-dev-cmd@v1
+      if: ${{ matrix.msvc }}
+      with:
+        arch: ${{ matrix.ilammy }}
+
+    - name: Linux install
+      if: ${{ matrix.linux }}
+      run: |
+        sudo dpkg --add-architecture i386
+        sudo apt update
+        sudo apt install -y g++-multilib gcc-multilib
+
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Cache
-      run: cmake -S . -B D64 -DCMAKE_BUILD_TYPE=D64 -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/I64
+    - name: Cache with A
+      if: ${{ matrix.msvc }}
+      run: cmake -S . -B Temp/${{ matrix.arch }}/${{ matrix.type }} -A ${{ matrix.cmakea }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}
+
+    - name: Cache Linux x86
+      if: ${{ matrix.linux && matrix.arch == 'x86' }}
+      run: cmake -S . -B Temp/${{ matrix.arch }}/${{ matrix.type }} -DFVL_LINUX_32=1 -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}
+
+    - name: Cache Linux x64
+      if: ${{ matrix.linux && matrix.arch != 'x86' }}
+      run: cmake -S . -B Temp/${{ matrix.arch }}/${{ matrix.type }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}
 
     - name: Build
-      run: cmake --build D64
+      run: cmake --build Temp/${{ matrix.arch }}/${{ matrix.type }}
 
     - name: Install
-      run: cmake --build D64 --target install
+      run: cmake --build Temp/${{ matrix.arch }}/${{ matrix.type }} --target install

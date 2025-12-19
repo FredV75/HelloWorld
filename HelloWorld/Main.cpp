@@ -1,5 +1,7 @@
 
 #include "LibC/ILibC.h"
+#include "Shared/IShared.h"
+#include "Static/IStatic.h"
 
 #ifndef __linux__
 #pragma warning(push, 1)
@@ -16,6 +18,18 @@ int main(int a_argc, char *a_argv[], char *a_envs[])
     (void)_CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_LEAK_CHECK_DF);
     // _CrtSetBreakAlloc(171);
     ::SetConsoleOutputCP(65001);
+#endif
+
+#ifdef FVL_32B
+    static_assert(sizeof(void*) == 4, "mismatch");
+#else
+    static_assert(sizeof(void*) == 8, "mismatch");
+#endif
+
+#ifdef FVL_64B
+    static_assert(sizeof(void*) == 8, "mismatch");
+#else
+    static_assert(sizeof(void*) == 4, "mismatch");
 #endif
 
     (void)a_argc;
@@ -46,6 +60,28 @@ int main(int a_argc, char *a_argv[], char *a_envs[])
     ILibC::Delete(pC);
 #endif
 
+    IShared *pShared = IShared::Create();
+    IShared::Delete(pShared);
+
+    IStatic *pStatic = IStatic::Create();
+    IStatic::Delete(pStatic);
+
     char *pNew = new char[123];
     (void)pNew;
 }
+
+#if 0
+
+// x64-linux.cmake
+set(CMAKE_CXX_COMPILER "g++" CACHE STRING "")
+set(CMAKE_C_COMPILER "gcc" CACHE STRING "")
+set(CMAKE_ASM_COMPILER "gcc" CACHE STRING "")
+set(CMAKE_ASM-ATT_COMPILER "as" CACHE STRING "")
+
+ilammy/msvc-dev-cmd
+arch: 'x86'
+toolset: ''
+
+
+#endif
+
