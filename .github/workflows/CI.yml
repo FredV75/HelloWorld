@@ -18,6 +18,13 @@ jobs:
             linux: true
             preset: 'X64D'
             coverage: false
+          - show: 'Ubuntu x86 Debug'
+            os: ubuntu-latest
+            arch: x86
+            type: Debug
+            linux: true
+            preset: 'X32D'
+            coverage: false
           - show: 'Windows x64 Debug'
             os: windows-latest
             arch: x64
