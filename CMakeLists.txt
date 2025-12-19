@@ -705,6 +705,69 @@ macro(FvlAddExecutable)
 endmacro()
 
 ########################################################################################################################
+macro(FvlAddTest)
+    cmake_parse_arguments(FVL_ADD_TEST "" "NAME" "IF;TARGET" ${ARGN})
+
+    if(NOT FVL_ADD_TEST_IF)
+        set(FVL_ADD_TEST_IF ON)
+    endif()
+
+    if(${FVL_ADD_TEST_IF})
+        if(NOT FVL_ADD_TEST_NAME)
+            set(FVL_ADD_TEST_NAME "${PROJECT_NAME}")
+        endif()
+
+        if(NOT FVL_ADD_TEST_TARGET)
+            set(FVL_ADD_TEST_TARGET "Shared;Static")
+        endif()
+
+        message(DEBUG "FvlAddExecutable(NAME;${FVL_ADD_TEST_NAME};TARGET;${FVL_ADD_TEST_TARGET})")
+
+        foreach(FVL_ADD_TEST_L_TARGET IN LISTS FVL_ADD_TEST_TARGET)
+            if(NOT ${FVL_ADD_TEST_L_TARGET} IN_LIST FVL_TARGET_LIST)
+                message(FATAL_ERROR "FUCK !!!")
+            endif()
+
+            FvlAddExecutable(NAME ${FVL_ADD_TEST_NAME} TARGET ${FVL_ADD_TEST_L_TARGET})
+
+            add_test(NAME ${FVL_ADD_TEST_NAME}-${FVL_ADD_TEST_L_TARGET} COMMAND "$<TARGET_FILE_NAME:${FVL_ADD_TEST_NAME}-${FVL_ADD_TEST_L_TARGET}>" WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
+
+            file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/tests")
+            if (NOT FVL_GENERATE_CTESTS_ONCE)
+                configure_file(
+                    "${FVL_CMAKE_MODULES_DIR}/CMake/CTestTestfile.cmake.in"
+                    "${CMAKE_CURRENT_BINARY_DIR}/tests/CTestTestfile.cmake"
+                    @ONLY
+                )
+
+                install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tests/CTestTestfile.cmake" DESTINATION tests)
+                set(FVL_GENERATE_CTESTS_ONCE TRUE PARENT_SCOPE)
+            endif()
+
+            file(
+                GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/tests/${FVL_ADD_TEST_NAME}-${FVL_ADD_TEST_L_TARGET}.ctest"
+                CONTENT "add_test(${FVL_ADD_TEST_NAME}-${FVL_ADD_TEST_L_TARGET} \"$<TARGET_FILE_NAME:${FVL_ADD_TEST_NAME}-${FVL_ADD_TEST_L_TARGET}>\")\nset_tests_properties(${FVL_ADD_TEST_NAME}-${FVL_ADD_TEST_L_TARGET} PROPERTIES WORKING_DIRECTORY \"\${CMAKE_CURRENT_LIST_DIR}/../${CMAKE_INSTALL_BINDIR}\")\n"
+            )
+
+            install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tests/${FVL_ADD_TEST_NAME}-${FVL_ADD_TEST_L_TARGET}.ctest" DESTINATION tests)
+
+            set(FVL_ADD_TEST_L_ONCE ON)
+        endforeach()
+        unset(FVL_ADD_TEST_L_TARGET)
+
+        if(NOT FVL_ADD_TEST_L_ONCE)
+            message(FATAL_ERROR "FUCK !!!")
+        endif()
+        unset(FVL_ADD_TEST_L_ONCE)
+    endif()
+
+    foreach(FVL_ADD_TEST_L_VAR IF NAME TARGET)
+        unset(FVL_ADD_TEST_${FVL_ADD_TEST_L_VAR})
+    endforeach()
+    unset(FVL_ADD_TEST_L_VAR)
+endmacro()
+
+########################################################################################################################
 macro(FvlProjectEnd)
     cmake_parse_arguments(FVL_PROJECT_END "" "NAME" "IF;TARGET" ${ARGN})
 
@@ -755,7 +818,11 @@ FvlAddTarget(Static TYPE Static SUFFIX Lib)
 FvlAddTarget(Interface TYPE Interface)
 FvlAddTarget(Hybrid TYPE Shared SUFFIX Hybrid)
 
+########################################################################################################################
 project(HelloWorld)
+
+include(CTest)
+enable_testing()
 
 add_subdirectory(Core)
 add_subdirectory(LibA)
@@ -764,6 +831,7 @@ add_subdirectory(LibC)
 add_subdirectory(Shared)
 add_subdirectory(Static)
 add_subdirectory(HelloWorld)
+add_subdirectory(UnitTest)
 
 #message(STATUS "########################################################################################################################")
 #FvlPrintVariables()
