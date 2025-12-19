@@ -58,8 +58,12 @@ jobs:
       if: ${{ matrix.msvc }}
       run: cmake -S . -B Temp/${{ matrix.arch }}/${{ matrix.type }} -A ${{ matrix.cmakea }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}
 
-    - name: Cache
-      if: ${{ matrix.linux }}
+    - name: Cache Linux x86
+      if: ${{ matrix.linux }} && ${{ matrix.arch }} == 'x86'
+      run: cmake -S . -B Temp/${{ matrix.arch }}/${{ matrix.type }} -DFVL_LINUX_32=1 -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}
+
+    - name: Cache Linux x64
+      if: ${{ matrix.linux }} && ${{ matrix.arch }} != 'x86'
       run: cmake -S . -B Temp/${{ matrix.arch }}/${{ matrix.type }} -DCMAKE_BUILD_TYPE=${{ matrix.type }} -DCMAKE_INSTALL_PREFIX:PATH=${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}
 
     - name: Build

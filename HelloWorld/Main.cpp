@@ -1,5 +1,7 @@
 
 #include "LibC/ILibC.h"
+#include "Shared/IShared.h"
+#include "Static/IStatic.h"
 
 #ifndef __linux__
 #pragma warning(push, 1)
@@ -57,6 +59,12 @@ int main(int a_argc, char *a_argv[], char *a_envs[])
     ILibC *pC = ILibC::Create();
     ILibC::Delete(pC);
 #endif
+
+    IShared *pShared = IShared::Create();
+    IShared::Delete(pShared);
+
+    IStatic *pStatic = IStatic::Create();
+    IStatic::Delete(pStatic);
 
     char *pNew = new char[123];
     (void)pNew;
