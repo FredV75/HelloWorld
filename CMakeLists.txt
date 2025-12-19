@@ -733,16 +733,6 @@ macro(FvlAddTest)
             add_test(NAME ${FVL_ADD_TEST_NAME}-${FVL_ADD_TEST_L_TARGET} COMMAND "$<TARGET_FILE_NAME:${FVL_ADD_TEST_NAME}-${FVL_ADD_TEST_L_TARGET}>" WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
 
             file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/tests")
-            if (NOT FVL_GENERATE_CTESTS_ONCE)
-                configure_file(
-                    "${FVL_CMAKE_MODULES_DIR}/CMake/CTestTestfile.cmake.in"
-                    "${CMAKE_CURRENT_BINARY_DIR}/tests/CTestTestfile.cmake"
-                    @ONLY
-                )
-
-                install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tests/CTestTestfile.cmake" DESTINATION tests)
-                set(FVL_GENERATE_CTESTS_ONCE TRUE PARENT_SCOPE)
-            endif()
 
             file(
                 GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/tests/${FVL_ADD_TEST_NAME}-${FVL_ADD_TEST_L_TARGET}.ctest"
@@ -759,6 +749,17 @@ macro(FvlAddTest)
             message(FATAL_ERROR "FUCK !!!")
         endif()
         unset(FVL_ADD_TEST_L_ONCE)
+
+        if (NOT FVL_GENERATE_CTESTS_ONCE)
+            configure_file(
+                "${FVL_CMAKE_MODULES_DIR}/CMake/CTestTestfile.cmake.in"
+                "${CMAKE_CURRENT_BINARY_DIR}/tests/CTestTestfile.cmake"
+                @ONLY
+            )
+
+            install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tests/CTestTestfile.cmake" DESTINATION tests)
+            set(FVL_GENERATE_CTESTS_ONCE TRUE CACHE STRING "CTestTestfile.cmake")
+        endif()
     endif()
 
     foreach(FVL_ADD_TEST_L_VAR IF NAME TARGET)
