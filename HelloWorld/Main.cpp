@@ -68,20 +68,7 @@ int main(int a_argc, char *a_argv[], char *a_envs[])
 
     char *pNew = new char[123];
     (void)pNew;
+
+    return 0;
 }
-
-#if 0
-
-// x64-linux.cmake
-set(CMAKE_CXX_COMPILER "g++" CACHE STRING "")
-set(CMAKE_C_COMPILER "gcc" CACHE STRING "")
-set(CMAKE_ASM_COMPILER "gcc" CACHE STRING "")
-set(CMAKE_ASM-ATT_COMPILER "as" CACHE STRING "")
-
-ilammy/msvc-dev-cmd
-arch: 'x86'
-toolset: ''
-
-
-#endif
 

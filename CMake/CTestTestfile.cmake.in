@@ -1,0 +1,9 @@
+#
+# Include all .ctest file in the same directory
+#
+file (GLOB TESTS "*.ctest")
+list(SORT TESTS)
+
+foreach(test ${TESTS})
+	include("${test}")
+endforeach()

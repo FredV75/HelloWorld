@@ -78,3 +78,8 @@ jobs:
 
     - name: Install
       run: cmake --build Temp/${{ matrix.arch }}/${{ matrix.type }} --target install
+
+    - name: CTest
+      run: |
+        cd ${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}/tests
+        ctest
