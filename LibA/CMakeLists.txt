@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(LibA)
-
+FvlProject(LibA)
 FvlAddLibrary()
 FvlTargetLinkLibraries(Core)
 FvlTargetSources(LibA.cpp)
