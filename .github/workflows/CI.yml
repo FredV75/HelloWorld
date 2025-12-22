@@ -97,4 +97,6 @@ jobs:
 
     - name: Package
       if: ${{ matrix.msvc && matrix.coverage }}
-      run: oras push ghcr.io/FredV75/HelloWorld:1 data ${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}/cover/cobertura.xml
+      run: |
+        cd ${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}/cover
+        oras push ghcr.io/FredV75/HelloWorld:1 cobertura.xml
