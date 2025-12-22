@@ -95,8 +95,12 @@ jobs:
       if: ${{ matrix.msvc && matrix.coverage }}
       uses: oras-project/setup-oras@v1
 
+    - name: Log into GHCR
+      if: ${{ matrix.msvc && matrix.coverage }}
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | oras login ghcr.io --username ${{ github.actor }} --password-stdin
+
     - name: Package
       if: ${{ matrix.msvc && matrix.coverage }}
       run: |
         cd ${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}/cover
-        oras push ghcr.io/FredV75/HelloWorld:1 cobertura.xml
+        oras push ghcr.io/${{ github.repository }}/Cobertura:1 cobertura.xml
