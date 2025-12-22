@@ -91,9 +91,12 @@ jobs:
         cd ${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}/cover
         Coverage.bat
 
-    - name: Cobertura
-      if: ${{ matrix.msvc && matrix.coverage }}
-      uses: 5monkeys/cobertura-action@v14
+    - name: Install oras
+      if: ${{ matrix.msvc }}
+      uses: oras-project/setup-oras@v1
       with:
-        path: ${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}/cover/cobertura.xml
-        minimum_coverage: 75
+        version: 'latest'
+
+    - name: Package
+      if: ${{ matrix.msvc }}
+      run: oras push ghcr.io/FredV75/HelloWorld:1 data ${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}/cover/cobertura.xml
