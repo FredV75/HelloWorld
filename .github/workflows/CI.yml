@@ -46,8 +46,8 @@ jobs:
 
     steps:
     - name: MSVC variables
-      uses: ilammy/msvc-dev-cmd@v1
       if: ${{ matrix.msvc }}
+      uses: ilammy/msvc-dev-cmd@v1
       with:
         arch: ${{ matrix.ilammy }}
 
@@ -90,3 +90,10 @@ jobs:
       run: |
         cd ${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}/cover
         Coverage.bat
+
+    - name: Cobertura
+      if: ${{ matrix.msvc && matrix.coverage }}
+      uses: 5monkeys/cobertura-action@v14
+      with:
+        path: ${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}/cover/cobertura.xml
+        minimum_coverage: 75
