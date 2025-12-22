@@ -92,11 +92,9 @@ jobs:
         Coverage.bat
 
     - name: Install oras
-      if: ${{ matrix.msvc }}
+      if: ${{ matrix.msvc && matrix.coverage }}
       uses: oras-project/setup-oras@v1
-      with:
-        version: 'latest'
 
     - name: Package
-      if: ${{ matrix.msvc }}
+      if: ${{ matrix.msvc && matrix.coverage }}
       run: oras push ghcr.io/FredV75/HelloWorld:1 data ${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}/cover/cobertura.xml
