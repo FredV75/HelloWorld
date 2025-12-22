@@ -18,3 +18,9 @@ LibB::LibB()
 LibB::~LibB()
 {
 }
+
+int LibB::VirtualFct() const
+{
+    return 0;
+}
+

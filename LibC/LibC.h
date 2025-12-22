@@ -11,6 +11,9 @@ public:
     LibC();
     virtual ~LibC();
 
+    LibC(const LibC &) = delete;
+    LibC &operator=(const LibC &) = delete;
+
     ILibA *m_pILibA;
     ILibB *m_pILibB;
 };

@@ -746,6 +746,8 @@ macro(FvlAddTest)
                 message(FATAL_ERROR "FvlAddTest() to unknown TARGET named \"${FVL_ADD_TEST_L_TARGET}\"")
             endif()
 
+            string(TOUPPER "${FVL_ADD_TEST_L_TARGET}" FVL_ADD_TEST_L_TARGET_UPPER)
+
             FvlAddExecutable(NAME ${FVL_ADD_TEST_NAME} TARGET ${FVL_ADD_TEST_L_TARGET})
 
             add_test(NAME ${FVL_ADD_TEST_NAME}-${FVL_ADD_TEST_L_TARGET} COMMAND "$<TARGET_FILE_NAME:${FVL_ADD_TEST_NAME}-${FVL_ADD_TEST_L_TARGET}>" WORKING_DIRECTORY "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_BINDIR}")
@@ -768,6 +770,11 @@ macro(FvlAddTest)
             )
 
             install(FILES "${CMAKE_CURRENT_BINARY_DIR}/tests/${FVL_ADD_TEST_NAME}-${FVL_ADD_TEST_L_TARGET}.ctest" DESTINATION tests)
+
+            get_property(FVL_TEST_EXE_LIST_L_LIST GLOBAL PROPERTY FVL_TEST_EXE_LIST)
+            list(APPEND FVL_TEST_EXE_LIST_L_LIST "${FVL_ADD_TEST_TARGET_FILE_NAME}")
+            set_property(GLOBAL PROPERTY FVL_TEST_EXE_LIST ${FVL_TEST_EXE_LIST_L_LIST})
+            unset(FVL_TEST_EXE_LIST_L_LIST)
 
             set(FVL_ADD_TEST_L_ONCE ON)
         endforeach()
@@ -818,6 +825,7 @@ macro(FvlProject)
         get_property(FVL_CMAKELISTS_TXT_LIST_L_LIST GLOBAL PROPERTY FVL_CMAKELISTS_TXT_LIST)
         list(APPEND FVL_CMAKELISTS_TXT_LIST_L_LIST ${CMAKE_CURRENT_LIST_FILE})
         set_property(GLOBAL PROPERTY FVL_CMAKELISTS_TXT_LIST ${FVL_CMAKELISTS_TXT_LIST_L_LIST})
+        unset(FVL_CMAKELISTS_TXT_LIST_L_LIST)
     endif()
 
     foreach(FVL_PROJECT_L_VAR IF NAME)
@@ -873,6 +881,27 @@ macro(FvlProjectEnd)
         unset(FVL_PROJECT_END_${FVL_PROJECT_END_L_VAR})
     endforeach()
     unset(FVL_PROJECT_END_L_VAR)
+endmacro()
+
+########################################################################################################################
+macro(FvlGenerateCoverageBat)
+    get_property(FVL_GENERATE_COVERAGE_BAT_L_LIST GLOBAL PROPERTY FVL_TEST_EXE_LIST)
+    message(STATUS "FvlGenerateCoverageBat(${FVL_GENERATE_COVERAGE_BAT_L_LIST})")
+
+    set(FVL_GENERATE_COVERAGE_BAT_CONTENT "mkdir Temp")
+    foreach(FVL_GENERATE_COVERAGE_BAT_L_EXE IN LISTS FVL_GENERATE_COVERAGE_BAT_L_LIST)
+        set(FVL_GENERATE_COVERAGE_BAT_CONTENT "${FVL_GENERATE_COVERAGE_BAT_CONTENT}\nMicrosoft.CodeCoverage.Console collect ../bin/${FVL_GENERATE_COVERAGE_BAT_L_EXE} -f cobertura -o Temp/${FVL_GENERATE_COVERAGE_BAT_L_EXE}.xml")
+    endforeach()
+    set(FVL_GENERATE_COVERAGE_BAT_CONTENT "${FVL_GENERATE_COVERAGE_BAT_CONTENT}\nMicrosoft.CodeCoverage.Console merge \"Temp/*.xml\" -f cobertura -o cobertura.xml\n")
+
+    file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/cover")
+
+    file(
+        GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/cover/Coverage.bat"
+        CONTENT "${FVL_GENERATE_COVERAGE_BAT_CONTENT}"
+    )
+
+    install(FILES "${CMAKE_CURRENT_BINARY_DIR}/cover/Coverage.bat" DESTINATION cover)
 endmacro()
 
 ########################################################################################################################

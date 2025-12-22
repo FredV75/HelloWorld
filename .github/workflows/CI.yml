@@ -33,7 +33,7 @@ jobs:
             ilammy: 'Win64'
             cmakea: 'x64'
             preset: 'W64D'
-            coverage: false
+            coverage: true
           - show: 'Windows x86 Debug'
             os: windows-latest
             arch: x86
@@ -83,3 +83,9 @@ jobs:
       run: |
         cd ${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}/tests
         ctest
+
+    - name: Coverage
+      if: ${{ matrix.msvc && matrix.coverage }}
+      run: |
+        cd ${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}/cover
+        Coverage.bat

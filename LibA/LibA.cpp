@@ -19,3 +19,8 @@ LibA::~LibA()
 {
 }
 
+int LibA::VirtualFct() const
+{
+    return 0;
+}
+

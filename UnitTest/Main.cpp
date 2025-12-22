@@ -61,6 +61,33 @@ void TestStatic()
     std::unique_ptr <IStatic, void (*)(IStatic*)> autoDeleteStatic(pIStatic, [](IStatic *a_pIStatic){ IStatic::Delete(a_pIStatic); });
 }
 
+void TestHybrid()
+{
+#ifdef HYBRID
+#ifndef __linux__
+    HMODULE hLib = ::LoadLibrary(LIBC_NAME);
+    if (hLib)
+    {
+        FVL_MSVC_PRAGMA_WARNING_PUSH;
+        FVL_MSVC_PRAGMA_WARNING(4191); // 'type cast': unsafe conversion
+
+        FctCreate pFctCreate = (FctCreate)(::GetProcAddress(hLib, "ILibC_Create"));
+        ILibC *pC = (*pFctCreate)();
+
+        FctDelete pFctDelete = (FctDelete)(::GetProcAddress(hLib, "ILibC_Delete"));
+        (*pFctDelete)(pC);
+
+        FVL_MSVC_PRAGMA_WARNING_POP;
+
+        ::FreeLibrary(hLib);
+    }
+#endif
+#else
+    ILibC *pC = ILibC::Create();
+    ILibC::Delete(pC);
+#endif
+}
+
 int main(int a_argc, char *a_argv[], char *a_envs[])
 {
 #ifndef __linux__
@@ -78,6 +105,8 @@ int main(int a_argc, char *a_argv[], char *a_envs[])
     TestILibB();
     TestILibC();
     TestShared();
+    TestStatic();
+    TestHybrid();
 
     return 0;
 }

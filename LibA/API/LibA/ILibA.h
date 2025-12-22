@@ -10,6 +10,8 @@ public:
     static ILibA *Create();
     static void Delete(ILibA *a_pILibA);
 
+    virtual int VirtualFct() const = 0;
+
     FVL_VIRTUAL_DESTRUCTOR(ILibA);
 };
 

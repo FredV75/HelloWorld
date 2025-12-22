@@ -27,4 +27,10 @@ FvlPrintVariables(FVL_)
 #message(STATUS "########################################################################################################################")
 
 get_property(FVL_CMAKELISTS_TXT_LIST_L_LIST GLOBAL PROPERTY FVL_CMAKELISTS_TXT_LIST)
-message(STATUS "!!! ALL => ${FVL_CMAKELISTS_TXT_LIST_L_LIST}")
+message(STATUS "!!! TXT => ${FVL_CMAKELISTS_TXT_LIST_L_LIST}")
+
+get_property(FVL_TEST_EXE_LIST_L_LIST GLOBAL PROPERTY FVL_TEST_EXE_LIST)
+message(STATUS "!!! EXE => ${FVL_TEST_EXE_LIST_L_LIST}")
+
+FvlGenerateCoverageBat()
+

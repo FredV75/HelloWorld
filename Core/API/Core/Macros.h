@@ -28,15 +28,15 @@
 #define FVL_VIRTUAL_DESTRUCTOR(name)\
     name() = default;\
     virtual ~name() = default;\
-    name(const name &) = default;\
-    name &operator=(const name &) = default
+    name(const name &) = delete;\
+    name &operator=(const name &) = delete
 #else
 #define FVL_VIRTUAL_DESTRUCTOR(name)\
     __pragma(warning(push));\
     __pragma(warning(disable: 4710));\
     name() = default;\
     virtual ~name() = default;\
-    name(const name &) = default;\
-    name &operator=(const name &) = default;\
+    name(const name &) = delete;\
+    name &operator=(const name &) = delete;\
     __pragma(warning(pop))
 #endif
