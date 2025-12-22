@@ -86,6 +86,7 @@ jobs:
 
     - name: Coverage
       if: ${{ matrix.msvc && matrix.coverage }}
+      shell: cmd
       run: |
         cd ${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}/cover
         Coverage.bat
