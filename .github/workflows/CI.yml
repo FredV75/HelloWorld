@@ -91,16 +91,11 @@ jobs:
         cd ${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}/cover
         Coverage.bat
 
-    - name: Install oras
+    - name: Upload Package
       if: ${{ matrix.msvc && matrix.coverage }}
-      uses: oras-project/setup-oras@v1
-
-    - name: Log into GHCR
-      if: ${{ matrix.msvc && matrix.coverage }}
-      run: echo "${{ secrets.GITHUB_TOKEN }}" | oras login ghcr.io --username ${{ github.actor }} --password-stdin
-
-    - name: Package
-      if: ${{ matrix.msvc && matrix.coverage }}
-      run: |
-        cd ${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}/cover
-        oras push ghcr.io/${{ github.repository }}/Cobertura:1 cobertura.xml
+      uses: actions/upload-artifact@v4
+      with:
+        name: Cobertura_${{ matrix.arch }}_${{ matrix.type }}
+        path: ${{ github.workspace }}/Install/${{ matrix.arch }}/${{ matrix.type }}/cover/cobertura.xml
+        if-no-files-found: error
+        compression-level: 9
